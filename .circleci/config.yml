@@ -4,7 +4,7 @@ executors:
   docker-executor:
     docker:
       - image: circleci/node:16
-    resource_class: medium
+    resource_class: longthanhdam/machine-runner
 
 jobs:
   build:
@@ -25,7 +25,7 @@ jobs:
       - run:
           name: Log in to Docker Registry
           command: |
-            echo "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY_URL" --username "$DOCKER_USERNAME" --password-stdin
+            echo "$DOCKER_PASSWORD" | docker login "https://mmregistry.mmvietnam.com:5000" --username "$DOCKER_USERNAME" --password-stdin
       - run:
           name: Tag Docker Image
           command: |
