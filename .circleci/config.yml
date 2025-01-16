@@ -29,11 +29,11 @@ jobs:
       - run:
           name: Tag Docker Image
           command: |
-            docker tag circleci-demo:latest longthanhdam/circleci-demo:latest
+            docker tag circleci-demo:latest mmregistry.mmvietnam.com:5000/longthanhdam/circleci-demo:latest
       - run:
           name: Push Docker Image to Registry
           command: |
-            docker push longthanhdam/circleci-demo:latest
+            docker push mmregistry.mmvietnam.com:5000/longthanhdam/circleci-demo:latest
 
 workflows:
   version: 2
