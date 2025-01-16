@@ -4,7 +4,7 @@ executors:
   docker-executor:
     docker:
       - image: circleci/node:16
-    resource_class: longthanhdam/machine-runner
+    resource_class: medium
 
 jobs:
   build:
