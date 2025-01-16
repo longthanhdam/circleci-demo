@@ -10,7 +10,7 @@ jobs:
   build:
     executor: docker-executor
     steps:
-      - checkout  # Lấy mã nguồn từ GitHub
+      - checkout  # Get code  GitHub
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
@@ -23,17 +23,17 @@ jobs:
           command: |
             docker build -t circleci-demo:latest .
       - run:
-          name: Log in to Docker Registry
+          name: Log in to Docker Hub
           command: |
-            echo "$DOCKER_PASSWORD" | docker login "https://mmregistry.mmvietnam.com:5000" --username "$DOCKER_USERNAME" --password-stdin
+            echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
       - run:
           name: Tag Docker Image
           command: |
-            docker tag circleci-demo:latest mmregistry.mmvietnam.com:5000/longthanhdam/circleci-demo:latest
+            docker tag circleci-demo:latest "$DOCKER_USERNAME/circleci-demo:latest"
       - run:
-          name: Push Docker Image to Registry
+          name: Push Docker Image to Docker Hub
           command: |
-            docker push mmregistry.mmvietnam.com:5000/longthanhdam/circleci-demo:latest
+            docker push "$DOCKER_USERNAME/circleci-demo:latest"
 
 workflows:
   version: 2
