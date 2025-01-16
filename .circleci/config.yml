@@ -6,6 +6,8 @@ jobs:
     steps:
       - checkout  # get source from GitHub
       - setup_remote_docker:  # Actived Docker
+         version: 20.10.0
+         docker_layer_caching: true
       - run:
           name: Install Docker CLI
           command: |
