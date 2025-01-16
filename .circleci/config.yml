@@ -4,14 +4,14 @@ executors:
   docker-executor:
     docker:
       - image: circleci/node:16
-    resource_class: medium  # Sửa indent cho dòng này
+    resource_class: medium
 
 jobs:
   build:
-    executor: docker-executor  # Image Node.js In-progress
+    executor: docker-executor
     steps:
-      - checkout  # Get source from GitHub
-      - setup_remote_docker:  # Activate Docker
+      - checkout  # Lấy mã nguồn từ GitHub
+      - setup_remote_docker:
           docker_layer_caching: true
       - run:
           name: Install Docker CLI
@@ -22,6 +22,18 @@ jobs:
           name: Build Docker Image
           command: |
             docker build -t circleci-demo:latest .
+      - run:
+          name: Log in to Docker Registry
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY_URL" --username "$DOCKER_USERNAME" --password-stdin
+      - run:
+          name: Tag Docker Image
+          command: |
+            docker tag circleci-demo:latest "$DOCKER_REGISTRY_URL"/circleci-demo:latest
+      - run:
+          name: Push Docker Image to Registry
+          command: |
+            docker push "$DOCKER_REGISTRY_URL"/circleci-demo:latest
 
 workflows:
   version: 2
