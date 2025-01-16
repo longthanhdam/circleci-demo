@@ -1,0 +1,25 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/node:16  # Image Node.js In-progress
+    steps:
+      - checkout  # get source from GitHub
+      - setup_remote_docker:  # Actived Docker
+          version: 20.10.0
+      - run:
+          name: Install Docker CLI
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y docker.io
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t circleci-demo:latest .
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+
