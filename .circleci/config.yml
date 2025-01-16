@@ -1,43 +1,31 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
-executors:
-  docker-executor:
-    docker:
-      - image: circleci/node:16
-    resource_class: medium
-
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/jobs-steps/#jobs-overview & https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  build:
-    executor: docker-executor
+  say-hello:
+    # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/executor-intro/ & https://circleci.com/docs/configuration-reference/#executor-job
+    docker:
+      # Specify the version you desire here
+      # See: https://circleci.com/developer/images/image/cimg/base
+      - image: cimg/base:current
+
+    # Add steps to the job
+    # See: https://circleci.com/docs/jobs-steps/#steps-overview & https://circleci.com/docs/configuration-reference/#steps
     steps:
-      - checkout  # Lấy mã nguồn từ GitHub
-      - setup_remote_docker:
-          docker_layer_caching: true
+      # Checkout the code as the first step.
+      - checkout
       - run:
-          name: Install Docker CLI
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y docker.io
-      - run:
-          name: Build Docker Image
-          command: |
-            docker build -t circleci-demo:latest .
-      - run:
-          name: Log in to Docker Registry
-          command: |
-            echo "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY_URL" --username "$DOCKER_USERNAME" --password-stdin
-      - run:
-          name: Tag Docker Image
-          command: |
-            docker tag circleci-demo:latest "$DOCKER_REGISTRY_URL"/circleci-demo:latest
-      - run:
-          name: Push Docker Image to Registry
-          command: |
-            docker push "$DOCKER_REGISTRY_URL"/circleci-demo:latest
+          name: "Say hello"
+          command: "echo Hello, World!"
 
+# Orchestrate jobs using workflows
+# See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  version: 2
-  build-and-test:
+  say-hello-workflow: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - build
-
+      - say-hello
